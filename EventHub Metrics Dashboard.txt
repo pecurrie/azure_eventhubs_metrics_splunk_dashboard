@@ -1,0 +1,266 @@
+{
+    "title": "EventHub Metrics",
+    "description": "Replicating the EventHub metrics from Azure",
+    "inputs": {
+        "input_OeFrtjYe": {
+            "dataSources": {
+                "primary": "ds_lyGuHUAZ"
+            },
+            "options": {
+                "defaultValue": "*",
+                "items": [],
+                "token": "resource_id"
+            },
+            "title": "Dropdown Input Title",
+            "type": "input.dropdown"
+        },
+        "input_global_trp": {
+            "options": {
+                "defaultValue": "-24h@h,now",
+                "token": "global_time"
+            },
+            "title": "Global Time Range",
+            "type": "input.timerange"
+        },
+        "input_o7uXkdcC": {
+            "options": {
+                "defaultValue": "azure_metric_index",
+                "token": "azure_metrics_index"
+            },
+            "title": "Index",
+            "type": "input.text"
+        }
+    },
+    "defaults": {
+        "dataSources": {
+            "ds.search": {
+                "options": {
+                    "queryParameters": {
+                        "earliest": "$global_time.earliest$",
+                        "latest": "$global_time.latest$"
+                    }
+                }
+            }
+        }
+    },
+    "visualizations": {
+        "viz_91MbfWe7": {
+            "dataSources": {
+                "primary": "ds_TxB5bjDc"
+            },
+            "description": "",
+            "options": {
+                "dataValuesDisplay": "off",
+                "legendDisplay": "bottom",
+                "legendMode": "standard",
+                "lineWidth": 2,
+                "nullValueDisplay": "gaps",
+                "showIndependentYRanges": false,
+                "showOverlayY2Axis": false,
+                "showRoundedY2AxisLabels": false,
+                "showSplitSeries": false,
+                "showY2MajorGridLines": true,
+                "xAxisLabelRotation": 0,
+                "xAxisTitleVisibility": "show",
+                "y2AxisAbbreviation": "auto",
+                "y2AxisScale": "inherit",
+                "y2AxisTitleVisibility": "show",
+                "yAxisAbbreviation": "auto",
+                "yAxisScale": "linear",
+                "yAxisTitleVisibility": "show"
+            },
+            "title": "Requests",
+            "type": "splunk.line"
+        },
+        "viz_gV1XUYDf": {
+            "options": {
+                "markdown": "**Resource ID**: $resource_id$"
+            },
+            "type": "splunk.markdown"
+        },
+        "viz_l0hkpKcj": {
+            "dataSources": {
+                "primary": "ds_vD3U2yqk_ds_QT2KjEzt_ds_TxB5bjDc"
+            },
+            "options": {
+                "dataValuesDisplay": "off",
+                "legendDisplay": "bottom",
+                "lineWidth": 2,
+                "nullValueDisplay": "gaps",
+                "showIndependentYRanges": false,
+                "showOverlayY2Axis": false,
+                "showRoundedY2AxisLabels": false,
+                "showSplitSeries": false,
+                "showY2MajorGridLines": true,
+                "xAxisLabelRotation": 0,
+                "xAxisTitleVisibility": "show",
+                "y2AxisAbbreviation": "auto",
+                "y2AxisScale": "inherit",
+                "y2AxisTitleVisibility": "show",
+                "yAxisAbbreviation": "auto",
+                "yAxisScale": "linear",
+                "yAxisTitleVisibility": "show"
+            },
+            "title": "Requests",
+            "type": "splunk.line"
+        },
+        "viz_oODOc3zs": {
+            "dataSources": {
+                "primary": "ds_QT2KjEzt_ds_TxB5bjDc"
+            },
+            "options": {
+                "dataValuesDisplay": "off",
+                "legendDisplay": "bottom",
+                "legendMode": "standard",
+                "lineWidth": 2,
+                "nullValueDisplay": "gaps",
+                "showIndependentYRanges": false,
+                "showOverlayY2Axis": false,
+                "showRoundedY2AxisLabels": false,
+                "showSplitSeries": false,
+                "showY2MajorGridLines": true,
+                "xAxisLabelRotation": 0,
+                "xAxisTitleVisibility": "show",
+                "y2AxisAbbreviation": "auto",
+                "y2AxisScale": "inherit",
+                "y2AxisTitleVisibility": "show",
+                "yAxisAbbreviation": "auto",
+                "yAxisScale": "linear",
+                "yAxisTitleVisibility": "show"
+            },
+            "title": "Requests",
+            "type": "splunk.line"
+        }
+    },
+    "dataSources": {
+        "ds_QT2KjEzt_ds_TxB5bjDc": {
+            "name": "Messages - Line chart search",
+            "options": {
+                "query": "| mstats sum(IncomingMessages.total) AS \"Incoming Messages (Sum)\"\nsum(OutgoingMessages.total) AS \"Outgoing Messages (Sum)\"\nsum(CapturedMessages.total) AS \"Captured Messages (Sum)\"\nsum(CapturedBacklog.avg) AS \"Captured Backlog (Avg)\"\n  WHERE index=$azure_metrics_index$ resource_id=$resource_id$\n  span=1m",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            },
+            "type": "ds.search"
+        },
+        "ds_TxB5bjDc": {
+            "name": "Requests - Line chart search",
+            "options": {
+                "query": "| mstats sum(IncomingRequests.total) AS \"Incoming Requests (Sum)\"\n         sum(SuccessfulRequests.total) AS \"Successful Requests (Sum)\"\n         sum(ServerErrors.total) AS \"Server Errors (Sum)\"\n         sum(UserErrors.total) AS \"User Errors (Sum)\"\n         sum(ThrottledRequests.total) AS \"Throttled Requests (Sum)\"\n  WHERE index=$azure_metrics_index$ resource_id=$resource_id$\n  span=1m",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            },
+            "type": "ds.search"
+        },
+        "ds_WUlcTWu8_ds_QT2KjEzt_ds_TxB5bjDc": {
+            "name": "Messages - Line chart search copy 2",
+            "options": {
+                "query": "| mstats sum(IncomingMessages.total) AS \"Incoming Messages (Sum)\"\nsum(OutgoingMessages.total) AS \"Outgoing Messages (Sum)\"\nsum(CapturedMessages.total) AS \"Captured Messages (Sum)\"\nsum(CapturedBacklog.avg) AS \"Captured Backlog (Avg)\"\n  WHERE index=eventhub_metrics resource_id=$resource_id$\n  span=1m",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            },
+            "type": "ds.search"
+        },
+        "ds_lyGuHUAZ": {
+            "name": "resource_id input",
+            "options": {
+                "query": "| mpreview index=eventhub_metrics\n| fields resource_id\n| dedup resource_id\n| sort resource_id",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            },
+            "type": "ds.search"
+        },
+        "ds_ogauuApE_ds_TxB5bjDc": {
+            "name": "Requests - Line chart search copy 1",
+            "options": {
+                "query": "| mstats sum(IncomingRequests.total) AS \"Incoming Requests (Sum)\"\n         sum(SuccessfulRequests.total) AS \"Successful Requests (Sum)\"\n         sum(ServerErrors.total) AS \"Server Errors (Sum)\"\n         sum(UserErrors.total) AS \"User Errors (Sum)\"\n         sum(ThrottledRequests.total) AS \"Throttled Requests (Sum)\"\n  WHERE index=eventhub_metrics resource_id=$resource_id$\n  span=1m",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            },
+            "type": "ds.search"
+        },
+        "ds_vD3U2yqk_ds_QT2KjEzt_ds_TxB5bjDc": {
+            "name": "Messages - Line chart search copy 1",
+            "options": {
+                "query": "| mstats sum(IncomingBytes.total) AS \"Incoming Bytes (Sum)\"\nsum(OutgoingBytes.total) AS \"Outgoing Bytes (Sum)\"\nsum(CapturedBytes.total) AS \"Captured Bytes (Sum)\"\n  WHERE index=$azure_metrics_index$ resource_id=$resource_id$\n  span=1m",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            },
+            "type": "ds.search"
+        }
+    },
+    "layout": {
+        "globalInputs": [
+            "input_global_trp",
+            "input_o7uXkdcC",
+            "input_OeFrtjYe"
+        ],
+        "layoutDefinitions": {
+            "layout_Q8VTaU8H": {
+                "structure": [
+                    {
+                        "item": "viz_gV1XUYDf",
+                        "position": {
+                            "h": 64,
+                            "w": 1200,
+                            "x": 0,
+                            "y": 0
+                        },
+                        "type": "block"
+                    },
+                    {
+                        "item": "viz_91MbfWe7",
+                        "position": {
+                            "h": 334,
+                            "w": 426,
+                            "x": 0,
+                            "y": 64
+                        },
+                        "type": "block"
+                    },
+                    {
+                        "item": "viz_oODOc3zs",
+                        "position": {
+                            "h": 334,
+                            "w": 386,
+                            "x": 426,
+                            "y": 64
+                        },
+                        "type": "block"
+                    },
+                    {
+                        "item": "viz_l0hkpKcj",
+                        "position": {
+                            "h": 334,
+                            "w": 388,
+                            "x": 812,
+                            "y": 64
+                        },
+                        "type": "block"
+                    }
+                ],
+                "type": "grid"
+            }
+        },
+        "options": {},
+        "tabs": {
+            "items": [
+                {
+                    "label": "New tab",
+                    "layoutId": "layout_Q8VTaU8H"
+                }
+            ]
+        }
+    }
+}
